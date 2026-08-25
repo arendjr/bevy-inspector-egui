@@ -5,7 +5,9 @@ use crate::{
     utils::pretty_type_name,
 };
 use bevy_platform::time::Instant;
-use bevy_reflect::{FromType, PartialReflect, Reflect, TypePath, TypeRegistry};
+use bevy_reflect::{
+    FromType, GetTypeRegistration, PartialReflect, Reflect, TypePath, TypeRegistry,
+};
 use std::{
     any::{Any, TypeId},
     borrow::Cow,
@@ -224,7 +226,8 @@ fn many_unimplemented<T: Any>(
     false
 }
 
-fn add<T: InspectorPrimitive + TypePath>(type_registry: &mut TypeRegistry) {
+fn add<T: InspectorPrimitive + GetTypeRegistration + TypePath>(type_registry: &mut TypeRegistry) {
+    type_registry.register::<T>();
     type_registry.register_type_data::<T, InspectorEguiImpl>();
 }
 fn add_of_with_many<T: InspectorPrimitive>(
